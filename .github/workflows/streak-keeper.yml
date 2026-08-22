@@ -1,14 +1,16 @@
 name: Streak keeper
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '15 1,7,14,20 * * *'
+    - cron: '17 6,20 * * *'
   push:
     branches:
       - main
 
 jobs:
   login:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -20,14 +22,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: 'pnpm'
 
       - name: Install dependencies
         run: corepack enable && pnpm install
 
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Restore/Save State Cache
         uses: actions/cache@v4
@@ -42,6 +44,5 @@ jobs:
       - name: Run Practice
         env:
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
-          PRACTICE_LANGUAGE: Turkish
           HEADLESS: true
         run: pnpm practice

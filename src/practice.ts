@@ -7,7 +7,7 @@ import { getStatePath, waitForLogin, ensureStateExists } from './utils/auth.js';
 import { startNetworkLogging, captureUserData } from './utils/network.js';
 import { solveVisibleTokens } from './utils/solver.js';
 import { startWordsLesson } from './utils/navigation.js';
-import { getCurrentLanguage, selectLanguage } from './utils/homepage.js';
+import { getCurrentLanguage, selectLanguage, getTodaysStreakCompleted } from './utils/homepage.js';
 import { getBrowserConfig, getContextOptions } from './utils/browser.js';
 
 dotenv.config();
@@ -18,7 +18,7 @@ dotenv.config();
     const storageStatePath = getStatePath();
     const validStatePath = ensureStateExists();
     if (!validStatePath) {
-        console.error('❌ No saved state found. Please login first.');
+        console.error('âŒ No saved state found. Please login first.');
         process.exit(1);
     }
 
@@ -39,16 +39,24 @@ dotenv.config();
         await page.goto('https://www.duolingo.com/learn', { waitUntil: 'domcontentloaded' });
 
         if (!await waitForLogin(page)) {
-            console.error('❌ Not logged in.');
+            console.error('âŒ Not logged in.');
             await browser.close();
             process.exit(1);
         }
 
         const userData = await userDataPromise;
         if (!userData) {
-            console.error('❌ Failed to capture user data.');
+            console.error('âŒ Failed to capture user data.');
             await browser.close();
             process.exit(1);
+        }
+
+        // Streak-only guard: do not complete extra lessons once today's streak is safe.
+        const streakLogs = { userData, leaderboardData: null };
+        if (getTodaysStreakCompleted(streakLogs)) {
+            console.log("✅ Today's streak is already complete. Nothing to do.");
+            await browser.close();
+            return;
         }
 
         // Language Switch Logic
@@ -65,7 +73,7 @@ dotenv.config();
 
         const sessionData = await startWordsLesson(page);
         if (!sessionData || !sessionData.challenges) {
-            console.error('❌ Failed to capture session data.');
+            console.error('âŒ Failed to capture session data.');
             await browser.close();
             process.exit(1);
         }
