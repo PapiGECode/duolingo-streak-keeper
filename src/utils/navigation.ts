@@ -27,10 +27,22 @@ export async function startWordsLesson(page: Page): Promise<Session | null> {
         await page.goto('https://www.duolingo.com/practice-hub', { waitUntil: 'domcontentloaded' });
     }
 
-    // Duolingo localizes collection labels. The data-test id is stable, but the
-    // former English-only "Words" match fails for users with a Spanish UI.
-    const wordsButton = page.getByRole('button', { name: /^(Words|Palabras)\b/i });
-    await wordsButton.waitFor({ state: 'visible', timeout: 10000 });
+    // The collection's test id is stable, while its accessible name varies by
+    // locale and experiment. Wait for the hub to finish rendering, then choose
+    // the vocabulary card from the available collection buttons.
+    const collectionButtons = page.locator('[data-test="practice-hub-collection-button"]');
+    await collectionButtons.first().waitFor({ state: 'visible', timeout: 30000 });
+
+    const buttons = await collectionButtons.all();
+    const labels = await Promise.all(buttons.map(button => button.innerText()));
+    console.log(`Practice collections: ${labels.map(label => JSON.stringify(label.replace(/\s+/g, ' ').trim())).join(', ')}`);
+
+    const vocabularyIndex = labels.findIndex(label => /\b(words?|palabras|vocabulary|vocabulario)\b/i.test(label));
+    if (vocabularyIndex < 0) {
+        throw new Error('Could not find the vocabulary practice collection.');
+    }
+
+    const wordsButton = buttons[vocabularyIndex];
     console.log('Clicking Words button...');
     await wordsButton.click();
     await wordsButton.waitFor({ state: 'hidden', timeout: 10000 });
