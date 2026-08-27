@@ -27,6 +27,10 @@ To run the bot in GitHub Actions, you need to securely provide your authenticati
     - Save it in your GitHub repository's **Settings > Secrets and variables > Actions** as `ENCRYPTION_KEY`.
     - Also add it to your local `.env` file.
 
+    To let scheduled GitHub Actions renew an expired Duolingo browser session,
+    also add `DUOLINGO_EMAIL` and `DUOLINGO_PASSWORD` as repository Actions
+    secrets. They are used only when the saved session can no longer be verified.
+
 2.  **Login locally**:
     - Run `pnpm run login-manual` to log in to Duolingo.
     - This will verify your credentials and save your session state locally.

@@ -55,6 +55,7 @@ dotenv.config();
         const streakLogs = { userData, leaderboardData: null };
         if (getTodaysStreakCompleted(streakLogs)) {
             console.log("✅ Today's streak is already complete. Nothing to do.");
+            await context.storageState({ path: storageStatePath });
             await browser.close();
             return;
         }
@@ -109,6 +110,9 @@ dotenv.config();
 
         console.log('Session loop ended.');
         await page.screenshot({ path: path.join(logDir, 'session_completed.png') });
+        // Persist refreshed cookies/local storage. GitHub Actions caches this file
+        // between scheduled runs, so a valid session does not slowly go stale.
+        await context.storageState({ path: storageStatePath });
         await browser.close();
 
     } catch (error) {

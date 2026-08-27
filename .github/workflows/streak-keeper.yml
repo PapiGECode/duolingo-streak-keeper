@@ -41,8 +41,29 @@ jobs:
           restore-keys: |
             state-${{ runner.os }}-
 
+      # A saved browser state eventually expires.  When credentials are configured
+      # as repository secrets, refresh it before attempting the practice session.
+      - name: Verify or refresh Duolingo session
+        env:
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          DUOLINGO_EMAIL: ${{ secrets.DUOLINGO_EMAIL }}
+          DUOLINGO_PASSWORD: ${{ secrets.DUOLINGO_PASSWORD }}
+        run: |
+          if pnpm login-verify; then
+            exit 0
+          fi
+
+          if [ -z "$DUOLINGO_EMAIL" ] || [ -z "$DUOLINGO_PASSWORD" ]; then
+            echo "The saved Duolingo session has expired. Add DUOLINGO_EMAIL and DUOLINGO_PASSWORD repository secrets to allow automatic renewal."
+            exit 1
+          fi
+
+          pnpm login-auto -- --force-login
+
       - name: Run Practice
         env:
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          DUOLINGO_EMAIL: ${{ secrets.DUOLINGO_EMAIL }}
+          DUOLINGO_PASSWORD: ${{ secrets.DUOLINGO_PASSWORD }}
           HEADLESS: true
         run: pnpm practice
