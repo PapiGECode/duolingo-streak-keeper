@@ -3,32 +3,30 @@ import { captureSessionData } from './network';
 import { Session } from '../interfaces';
 
 /**
- * Navigates to the Practice Hub and starts the "Words" lesson.
+ * Navigates to the Practice Hub and starts the vocabulary lesson.
  * Handles navigation, button clicks, and robust Start button interaction.
  */
 export async function startWordsLesson(page: Page): Promise<Session | null> {
     console.log('Navigating to Words lesson...');
 
-    // Navigate to Learn page if not already there
-    if (!page.url().includes('/learn')) {
-        await page.goto('https://www.duolingo.com/learn', { waitUntil: 'domcontentloaded' });
+    // Going directly to the hub is more reliable than depending on the current
+    // page's navigation layout.
+    if (!page.url().includes('/practice-hub')) {
+        await page.goto('https://www.duolingo.com/practice-hub', { waitUntil: 'domcontentloaded' });
     }
 
-    // Click Practice Hub navigation item
-    const practiceHubNav = page.locator('[data-test="practice-hub-nav"]');
-    await practiceHubNav.waitFor({ timeout: 10000 });
-    await practiceHubNav.click();
-
-
-    // Click "Words" collection button
-    const wordsButton = page.locator('[data-test="practice-hub-collection-button"]').filter({ hasText: 'Words' });
+    // Duolingo localizes collection labels. The data-test id is stable, but the
+    // former English-only "Words" match fails for users with a Spanish UI.
+    const wordsButton = page
+        .locator('[data-test="practice-hub-collection-button"]')
+        .filter({ hasText: /Words|Palabras/i });
     await wordsButton.waitFor({ state: 'visible', timeout: 10000 });
     console.log('Clicking Words button...');
     await wordsButton.click();
     await wordsButton.waitFor({ state: 'hidden', timeout: 10000 });
     const sessionDataPromise = captureSessionData(page, 30000);
 
-    const startButton = page.getByRole('button', { name: /START|REVIEW/i }).first();
+    const startButton = page.getByRole('button', { name: /START|REVIEW|EMPEZAR|REPASAR/i }).first();
     console.log('Clicking Start button...');
     await startButton.waitFor({ timeout: 10000 });
     await startButton.click();

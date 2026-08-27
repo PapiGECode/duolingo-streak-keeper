@@ -95,7 +95,7 @@ dotenv.config();
                 console.log(`Solved ${solvedCount} tokens.`);
 
                 // Check for Start button directly
-                const startButton = page.getByRole('button', { name: /START|REVIEW/i });
+                const startButton = page.getByRole('button', { name: /START|REVIEW|EMPEZAR|REPASAR/i });
                 if (await startButton.isVisible()) {
                     console.log('Start button detected. Session complete!');
                     break;
