@@ -2,6 +2,18 @@ import { Page } from 'playwright';
 import { captureSessionData } from './network';
 import { Session } from '../interfaces';
 
+async function dismissUpgradePrompt(page: Page): Promise<boolean> {
+    const dismissButton = page.getByRole('button', { name: /^(No, gracias|No thanks|Not now)$/i });
+    if (!await dismissButton.isVisible().catch(() => false)) {
+        return false;
+    }
+
+    console.log('Closing the optional upgrade prompt...');
+    await dismissButton.click();
+    await page.waitForTimeout(250);
+    return true;
+}
+
 /**
  * Navigates to the Practice Hub and starts the vocabulary lesson.
  * Handles navigation, button clicks, and robust Start button interaction.
@@ -28,6 +40,13 @@ export async function startWordsLesson(page: Page): Promise<Session | null> {
     console.log('Clicking Start button...');
     await startButton.waitFor({ timeout: 10000 });
     await startButton.click();
+
+    // Duolingo may show a Super upsell instead of opening the session. Close it
+    // and retry the start action once so the session request can be captured.
+    if (await dismissUpgradePrompt(page)) {
+        await startButton.click();
+    }
+
     await startButton.waitFor({ state: 'hidden', timeout: 10000 });
 
     return await sessionDataPromise;
