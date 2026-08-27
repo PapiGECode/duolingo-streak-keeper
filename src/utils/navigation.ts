@@ -17,9 +17,7 @@ export async function startWordsLesson(page: Page): Promise<Session | null> {
 
     // Duolingo localizes collection labels. The data-test id is stable, but the
     // former English-only "Words" match fails for users with a Spanish UI.
-    const wordsButton = page
-        .locator('[data-test="practice-hub-collection-button"]')
-        .filter({ hasText: /Words|Palabras/i });
+    const wordsButton = page.getByRole('button', { name: /^(Words|Palabras)\b/i });
     await wordsButton.waitFor({ state: 'visible', timeout: 10000 });
     console.log('Clicking Words button...');
     await wordsButton.click();
