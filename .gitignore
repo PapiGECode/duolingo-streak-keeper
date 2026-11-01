@@ -1,6 +1,12 @@
-node_modules
-logs
-state
+*.exe
+*.zip
+__pycache__/
+*.pyc
+*.log
+diagnostico.json
+ultima_prueba.png
+ultimo_fotograma.png
+background-settings.json
 .env
-.DS_Store
-dist
+state/
+assets/state.bin

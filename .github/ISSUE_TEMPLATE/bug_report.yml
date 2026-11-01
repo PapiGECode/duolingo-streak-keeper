@@ -1,0 +1,28 @@
+name: Problema con la aplicación
+description: Un error de inicio, detección o funcionamiento en Windows.
+title: '[Error] '
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Qué sucede
+      description: Describe los pasos y el resultado esperado. No adjuntes contraseñas ni datos de sesión.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versión de la aplicación y Windows
+      placeholder: '2.2.0 / Windows 11'
+    validations:
+      required: true
+  - type: input
+    id: display
+    attributes:
+      label: Pantalla, escala de Windows y zoom del navegador
+      placeholder: '3840 × 2160 / 150 % / 100 %'
+  - type: textarea
+    id: detail
+    attributes:
+      label: Botón o pantalla donde se detiene
+      description: Indica si tienes Sonidos disponible y la interfaz en español. Revisa cualquier captura antes de compartirla.

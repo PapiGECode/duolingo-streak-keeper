@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
+ <title id="title">Duolingo Streak Bot</title><desc id="desc">Aplicación para Windows. Modo rápido, en pantalla. Versión 2.2.</desc>
+ <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#122b22"/><stop offset="1" stop-color="#111827"/></linearGradient></defs>
+ <rect width="1200" height="340" rx="28" fill="url(#bg)"/>
+ <circle cx="1090" cy="50" r="190" fill="#58cc02" opacity=".08"/>
+ <rect x="56" y="45" width="200" height="32" rx="16" fill="#58cc02"/>
+ <text x="156" y="67" fill="#102017" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="15" font-weight="700">WINDOWS · v2.2</text>
+ <text x="56" y="154" fill="#fff" font-family="Segoe UI, sans-serif" font-size="62" font-weight="700">Duolingo Streak Bot</text>
+ <text x="59" y="205" fill="#b7c8c0" font-family="Segoe UI, sans-serif" font-size="25">Tu aplicación de escritorio. Ahora más rápida.</text>
+ <text x="59" y="277" fill="#92e65a" font-family="Segoe UI, sans-serif" font-size="19">DETECCIÓN VISUAL   /   CONTROL POR TECLAS   /   EN PANTALLA</text>
+ <rect x="988" y="122" width="134" height="104" rx="14" fill="none" stroke="#58cc02" stroke-width="7"/>
+ <path d="M1055 229v29m-35 0h70M1017 174l23 23 48-49" fill="none" stroke="#58cc02" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,191 +1,59 @@
-# Duolingo Bot
+<p align="center"><img src="docs/banner.svg" alt="Duolingo Streak Bot — Windows · Modo rápido · En pantalla" width="900"></p>
 
-![Break Free from Streak Anxiety](docs/duolingo-slavery-no-more.png)
+<p align="center">
+  <a href="https://github.com/PapiGECode/duolingo-streak-keeper/releases/latest"><img alt="Descargar" src="https://img.shields.io/badge/Descargar-Windows%20x64-58CC02?style=for-the-badge&logo=windows&logoColor=white"></a>
+  <img alt="Versión" src="https://img.shields.io/badge/Versi%C3%B3n-2.2-blue?style=for-the-badge">
+  <img alt="Modo" src="https://img.shields.io/badge/Modo-En%20pantalla-FF9600?style=for-the-badge">
+</p>
 
-A Playwright-based bot to automate Duolingo interactions and maintain your streak.
+Aplicación de escritorio para automatizar los botones del recorrido de **Sonidos** de Duolingo. Reconoce los controles en pantalla, hace clic y se detiene al completar una lección en el modo de una racha.
 
-## Motivation
+**Esta publicación es la versión rápida de Windows, anterior al modo en segundo plano.** Necesita Duolingo visible y utiliza el ratón del ordenador. No incluye extensiones de Chrome ni el conector local.
 
-Duolingo is a fantastic app for learning languages. However, the gamification mechanics—specifically the streak—can sometimes have the opposite effect. Instead of being a motivating tool for learning, it can become a daily chore. Many users find themselves logging in just to "keep the streak alive," focusing on the number rather than the actual learning.
+## Descargar y empezar
 
-The app transforms from a helpful educational tool into a source of anxiety, where you commit time solely to avoid losing your progress. If you find yourself in this position—enslaved by the streak and not using Duolingo for its intended purpose—this script is for you.
+1. Descarga **[Duolingo-Streak-Bot-2.2-Windows.zip](https://github.com/PapiGECode/duolingo-streak-keeper/releases/download/v2.2.0/Duolingo-Streak-Bot-2.2-Windows.zip)** y extrae su contenido.
+2. Abre `Duolingo_Streak_Bot.exe`. No necesitas instalar Python ni Node.js.
+3. Inicia sesión en tu propia cuenta de Duolingo. Usa la interfaz en **español**, con la sección **Sonidos** disponible.
+4. Coloca Duolingo maximizado en el **monitor principal**, con zoom del navegador al **100 %**.
+5. Selecciona el modo de **una racha** y pulsa **F6**. Deja libre el ratón durante la ejecución.
+6. Comprueba el resultado en Duolingo al terminar. **F8** detiene el bot en cualquier momento.
 
-Consider this your path to freedom. Keep your streak, but reclaim your time.
+También está disponible el [ejecutable suelto](https://github.com/PapiGECode/duolingo-streak-keeper/releases/download/v2.2.0/Duolingo_Streak_Bot.exe). Para usar la programación diaria, utiliza el ZIP y la instalación opcional descrita en la [guía](docs/USO.md).
 
-## TLDR; How can I automate my streak protection?
+## Qué incluye
 
-1.  **Fork the repository** and clone your fork locally.
-2.  **Authenticate**: Follow the [Secure Authentication Setup](#secure-authentication-setup) guide below to generate your encrypted state.
-3.  **Configure Schedule**: Optionally, customize the cron schedule in `.github/workflows/streak-keeper.yml` to run whenever you like.
+| Función | Comportamiento |
+| --- | --- |
+| Detección rápida | Busca los controles en zonas concretas de la pantalla. |
+| Pausa corta | 20 ms por defecto entre acciones distintas; 180 ms como mínimo al repetir el mismo botón. |
+| Escalado de Windows | Ajusta las coordenadas según el DPI de la ventana. |
+| Ejercicios de voz | Pulsa **«No puedo hablar ahora»**. |
+| Otros ejercicios | Reconoce **Saltar**, **Continuar**, **No gracias** y el inicio de Sonidos. |
+| Calibración | Conserva las plantillas personalizadas entre ejecuciones. |
+| Programación opcional | Tarea local de Windows, con el equipo encendido y la sesión desbloqueada. |
 
-### Secure Authentication Setup
+La pausa de 20 ms no es la duración de la lección: también influyen la captura, la detección, las animaciones y la conexión. El bot depende del diseño de Duolingo y de que el recorrido de Sonidos permita completar la lección con esos controles. No garantiza una racha en todas las cuentas, cursos o versiones de la web.
 
-To run the bot in GitHub Actions, you need to securely provide your authentication state.
+## Controles
 
-1.  **Generate an ENCRYPTION_KEY secret**:
-    - Generate a strong password (at least 32 characters).
-    - Save it in your GitHub repository's **Settings > Secrets and variables > Actions** as `ENCRYPTION_KEY`.
-    - Also add it to your local `.env` file.
+| Tecla | Acción |
+| --- | --- |
+| **F6** | Iniciar / pausar |
+| **F7** | Solo cámara de detección |
+| **F8** | Parada de emergencia |
 
-    To let scheduled GitHub Actions renew an expired Duolingo browser session,
-    also add `DUOLINGO_EMAIL` and `DUOLINGO_PASSWORD` as repository Actions
-    secrets. They are used only when the saved session can no longer be verified.
+## Ayuda y detalles
 
-2.  **Login locally**:
-    - Run `pnpm run login-manual` to log in to Duolingo.
-    - This will verify your credentials and save your session state locally.
+- [Guía de uso, instalación y solución de problemas](docs/USO.md)
+- [Cambios de la versión 2.2](CHANGELOG.md)
+- [Verificación del ejecutable publicado](docs/VERIFICACION.md)
+- [Informar de un problema](https://github.com/PapiGECode/duolingo-streak-keeper/issues/new?template=bug_report.yml)
 
-3.  **Encrypt your state**:
-    - Run `pnpm run encrypt-state` to generate an encrypted version of your session (`assets/state.bin`).
-    - This file is safe to commit because it can only be decrypted with your `ENCRYPTION_KEY`.
+## Sobre este repositorio
 
-4.  **Push your changes**:
-    - Commit and push the generated `assets/state.bin` to your repository.
+La aplicación original se conservaba únicamente como ejecutable. Esta publicación distribuye la copia **2.2-speech**, junto con documentación y scripts de instalación; **no contiene el código fuente completo de la aplicación ni permite recompilarla desde cero**.
 
+El proyecto anterior de Playwright sigue disponible en el [historial anterior a esta publicación](https://github.com/PapiGECode/duolingo-streak-keeper/tree/df0000ef9b5cdf0cf1bdddba4ac7666cdb690dd5). Sus tareas automáticas y su estado de sesión no forman parte de esta edición de escritorio.
 
-## Features
-
-- **Auto Login**: Automatically logs in using credentials from `.env`.
-- **Manual Login**: Helper script to log in manually and save the session state (useful for CAPTCHAs).
-- **Login Verification**: Verifies if the saved session state is still valid.
-- **State Management**: Saves browser state (cookies, local storage) to avoid repeated logins.
-- **State Encryption**: Encrypts the session state for secure storage and portability.
-
-## Prerequisites
-
-- Node.js (v24 or higher) - managed via `fnm`
-- pnpm - managed via `corepack`
-
-## Setup
-
-1.  **Clone the repository**
-    ```bash
-    git clone <repository-url>
-    cd duolingo-bot
-    ```
-
-2.  **Install dependencies**
-    ```bash
-    pnpm install
-    ```
-
-3.  **Configure Environment Variables**
-    Create a `.env` file in the root directory and add your Duolingo credentials:
-    ```env
-    DUOLINGO_EMAIL=your_email@example.com
-    DUOLINGO_PASSWORD=your_password
-    ENCRYPTION_KEY=your_32_char_encryption_key # Optional: For encrypting/decrypting state
-    HEADLESS=true # Optional: Set to false to see the browser
-    ```
-
-## Usage
-
-### 1. Start Practice (Default)
-Run the automated practice bot. This will use the saved state (or log in if needed) and solve practice lessons.
-```bash
-pnpm start
-```
-or
-```bash
-pnpm run practice
-```
-
-### 2. Manual Login (Recommended First Step)
-Run this command to open a browser window. Log in to Duolingo manually. The script will detect when you are logged in and save the session state.
-```bash
-pnpm run login-manual
-```
-*Note: This is useful if you encounter CAPTCHAs or 2FA.*
-
-### 3. Auto Login
-Attempt to log in automatically using the credentials in `.env`.
-```bash
-pnpm run login-auto
-```
-
-### 4. Verify Login
-Check if the currently saved session state is valid.
-```bash
-pnpm run login-verify
-```
-
-### 5. Get Status
-Get your current Duolingo status including gems, streak, league, and learning progress.
-```bash
-pnpm run get-status
-```
-This will save a detailed status report to `logs/<timestamp>_get-status/status.json` with:
-- Global stats: gems, streak, todaysStreakCompleted, league, dailyQuests, availableLanguages
-- Language-specific data: current language name and learning path units
-
-**Get All Languages:**
-To fetch data for **all** your learning languages in a single run:
-```bash
-pnpm run get-status -- --all
-```
-This will iterate through every language you are learning and aggregate the data into `status.json`.
-
-
-### 6. Switch Language
-Switch your active learning language.
-```bash
-pnpm run switch-language -- <language-name>
-```
-Examples:
-```bash
-pnpm run switch-language -- Turkish
-pnpm run switch-language -- Spanish
-pnpm run switch-language -- French
-```
-
-**Note:** Use the full language name as it appears in Duolingo (e.g., "Turkish", not "tr").
-
-### 7. Start Manual Session
-Open a browser with the saved session state to interact with Duolingo manually.
-```bash
-pnpm run start-manual
-```
-
-### 8. State Encryption
-Encrypt your `storageState.json` to `assets/state.bin` for secure backup or transfer.
-```bash
-pnpm run encrypt-state
-```
-
-### 9. State Decryption
-Decrypt `assets/state.bin` to `state/storageState.json`. Useful if you are restoring a session on a new machine.
-```bash
-pnpm run decrypt-state
-```
-
-
-## Security
-
-Your account security is paramount. If you follow the instructions above, your account is safe.
-
--   **Encryption**: The `state.bin` file is encrypted using AES-256-GCM, a military-grade encryption standard.
--   **Private Key**: It can **only** be decrypted using your unique `ENCRYPTION_KEY`.
--   **No Exposure**: This key exists only on your local machine and in your private GitHub Secrets. It is never committed to the repository.
-
-Even if someone forks your repository or downloads your `state.bin`, they **cannot** access your Duolingo account without your private key.
-
-
-## Project Structure
-
-- `src/practice.ts`: Main entry point for the practice bot.
-- `src/login-manual.ts`: Script for manual login and state saving.
-- `src/login-auto.ts`: Script for automated login.
-- `src/login-verify.ts`: Script to verify login status.
-- `src/get-status.ts`: Script to get current Duolingo status and progress.
-- `src/switch-language.ts`: Script to switch active learning language.
-- `src/start-manual.ts`: Script to launch browser with saved state.
-- `src/scripts/`: Helper scripts for state encryption/decryption.
-- `src/utils/`: Shared utilities for authentication, logging, data extraction, and browser config.
-- `src/interfaces/`: TypeScript interfaces for Duolingo API data structures.
-- `state/`: Directory where browser state (`storageState.json`) is saved (gitignored).
-- `assets/`: Directory for encrypted state (`state.bin`) and other static assets.
-- `logs/`: Directory for execution logs and screenshots (gitignored).
-
-## License
-
-ISC
+Proyecto independiente de **PapiGECode**, sin afiliación con Duolingo. Las marcas pertenecen a sus respectivos titulares. El ejecutable incluye bibliotecas de terceros que conservan sus propias licencias.

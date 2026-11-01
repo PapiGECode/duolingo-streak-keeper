@@ -1,0 +1,18 @@
+{
+  "version": "2.2.0",
+  "internal_version": "2.2-speech",
+  "platform": "windows-x64",
+  "mode": "foreground",
+  "artifacts": [
+    {
+      "name": "Duolingo_Streak_Bot.exe",
+      "size": 69511464,
+      "sha256": "06cbd8c570f7b4c2e6b43cbfbf1d15b302227971fd196947fccc9349a8bd5fa3"
+    },
+    {
+      "name": "Duolingo-Streak-Bot-2.2-Windows.zip",
+      "size": 68994904,
+      "sha256": "d5e24b40e12d1058bbcf083f1bb91c4d047949b8d52cfccc686744b20529545c"
+    }
+  ]
+}
